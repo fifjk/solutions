@@ -20,6 +20,9 @@ Fortsæt derefter med den næste fil.
 
 def print_squarenumbers(limit):
     pass
-
+    kvadrattal = 1
+    while kvadrattal * kvadrattal < limit:
+        print(kvadrattal * kvadrattal, end=' ')
+        kvadrattal += 1
 
 print_squarenumbers(700)
