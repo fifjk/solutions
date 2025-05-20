@@ -38,6 +38,15 @@ Fortsæt derefter med den næste fil.
 
 
 #  Write your function below this line:
+def sequence2(min_value, max_value):
+    for taligen in range(min_value, max_value + 1):
+        print(taligen, end= ' ')
 
+def sequence3(min_value, max_value, step_size):
+    for taligen3 in range(min_value, max_value, step_size):
+        print(taligen3, end= ' ')
 
 # Here starts the main program. Call your function here:
+sequence2(3, 8)
+print()
+sequence3(2, 16, 4)
