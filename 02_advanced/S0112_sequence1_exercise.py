@@ -26,6 +26,10 @@ Fortsæt derefter med den næste fil.
 
 
 #  Write your function below this line:
+def sequence1(max_value):
+    for tal in range(1, max_value + 1):
+        print(tal, end=' ')
 
-
-# Here starts the main program. Call your function here:
+# Here starts
+# the main program. Call your function here:
+(sequence1(4))
