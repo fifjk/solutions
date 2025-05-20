@@ -21,3 +21,10 @@ Fortsæt derefter med den næste fil.
 
 rows = ["A", "B", "C", "D"]
 cols = ["1", "2", "3", "4", "5"]
+
+def chessboard(rows, cols):
+    for row in rows:
+        for col in cols:
+            print(f"{row}{col}", end=', ')
+
+chessboard(rows, cols)
