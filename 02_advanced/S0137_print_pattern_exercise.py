@@ -49,6 +49,16 @@ Fortsæt derefter med den næste fil.
 """
 
 #  Write your functions below this line.
+def print_repeatedly(string, repititions):
+    print(string * repititions)
+    print()
 
+def print_pattern(string, repitition_list):
+    for tal in repitition_list:
+        print(string * tal)
+    print()
 
 # Here starts the main program. From the main program you can call your functions.
+print_repeatedly("xy", 3)
+print_pattern("oooz", [3, 7, 8, 2, 4, 6])
+print_pattern("abc", [4, 2, 1])
