@@ -23,8 +23,8 @@ def multiply_numbers(start, multiplier, upper_limit):
     Beginning with the start value, this function prints the current value,
     then multiplies it with multiplier, prints the new current value etc.
     The function stops when the current value is greater than the upper limit"""
-    pass
+    while start <= upper_limit:
+        print(start)
+        start = multiplier * start
 
-
-
-multiply_numbers(10, 2, 12345)
+multiply_numbers(6, 5, 300)
