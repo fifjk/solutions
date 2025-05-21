@@ -27,6 +27,8 @@ Når dit program er færdigt, skal du skubbe det til dit github-repository.
 Fortsæt derefter med den næste fil.
 """
 
-
+def minimum(numberlist):
+    lowestnumber = sorted(numberlist)[0]
+    return lowestnumber
 print(minimum([6, 2, 7, 3]))  # Should print 2
 print(minimum([8, 17, 8, 3, 5, 1, 3]))  # Should print 1
