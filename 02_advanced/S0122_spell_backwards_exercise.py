@@ -29,7 +29,9 @@ def spell(text):
 
 def spell_backwards(text):
     """Spells/prints text backwards"""
-    0
+    for letter in reversed(text):
+        print(letter, end="")
+    print()
 
 
 spell("Test")
