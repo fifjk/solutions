@@ -36,6 +36,16 @@ Fortsæt derefter med den næste fil.
 """
 
 #  Write your function below this line.
-
+def factorial(number):
+    result = 1
+    gangetal = 1
+    while gangetal <= number:
+        result *= gangetal
+        gangetal += 1
+    return result
 
 # Here starts the main program. From the main program you can call your functions.
+factorial_input = 6
+factorial(factorial_input)
+factorial_result = factorial(factorial_input)
+print(f"{factorial_input}! = ",factorial_result)
