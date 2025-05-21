@@ -22,7 +22,17 @@ def spell_consonants(text, letter_limit):
     """
     Spells/prints the first letter_limit letters of text.
     Prints only consonants and spaces (a, e, i, o, u, y do not get printed). """
-    pass
+    vowels = "aeiouy"
+    length = 0
+    for letter in text:
+        if letter not in vowels:
+            print(letter, end='')
+            length += 1
+        if letter in vowels:
+            length += 1
+        if length >= letter_limit:
+            break
+    print()
 
 
 spell_consonants("Hello world", 9)  # should print "Hll wr"
