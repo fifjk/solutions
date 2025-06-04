@@ -68,4 +68,85 @@ def demo():  # demonstration of basic turtle commands
 
 
 tom = turtle.Turtle()  # create an object named tom of type Turtle
-demo()
+
+
+def square(length):
+    print(type(tom))
+    tom.speed(3)
+    tom.forward(length)
+    tom.right(90)
+    tom.forward(length)
+    tom.right(90)
+    tom.forward(length)
+    tom.right(90)
+    tom.forward(length)
+    tom.penup()
+    turtle.done()
+
+
+def many_squares(antal, størrelse, afstand):
+    for x in range(antal):
+        tom.forward(størrelse)
+        tom.right(90)
+        tom.forward(størrelse)
+        tom.right(90)
+        tom.forward(størrelse)
+        tom.right(90)
+        tom.forward(størrelse)
+        tom.penup()
+        tom.forward(afstand)
+        tom.pendown()
+    turtle.done()
+
+def coolpattern(antal, størrelse, afstand):
+    for x in range(antal):
+        side_størrelse = størrelse
+        for y in range(størrelse // 5):
+            tom.forward(side_størrelse)
+            tom.right(90)
+            side_størrelse -= 5
+        tom.penup()
+        tom.setheading(0)
+        tom.forward(størrelse + afstand)
+        tom.pendown()
+    turtle.done()
+
+
+def starpatterns(antal, størrelse, afstand, type):
+
+    if type >3:
+        print("Type a number between 1 and 3 for 'type'.")
+    else:
+        tom.setheading(72)
+        tom.speed(1)
+        if type == 1:
+            for x in range(antal):
+                for y in range(5):
+                    tom.forward(størrelse)
+                    tom.right(144)
+                tom.penup()
+                tom.right(90)
+                tom.forward(størrelse + afstand)
+                tom.setheading(72)
+                tom.pendown()
+        elif type == 2:
+            for x in range(antal):
+                for y in range(7):
+                    tom.forward(størrelse)
+                    tom.right(154.2857)
+                tom.penup()
+                tom.right(90)
+                tom.forward(størrelse + afstand)
+                tom.setheading(72)
+                tom.pendown()
+        elif type == 3:
+            for x in range(antal):
+                for y in range(11):
+                    tom.forward(størrelse)
+                    tom.right(130.909)
+                tom.penup()
+                tom.right(90)
+                tom.forward(størrelse + afstand)
+                tom.setheading(72)
+                tom.pendown()
+    turtle.done()
