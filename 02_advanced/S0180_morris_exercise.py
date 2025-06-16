@@ -37,3 +37,138 @@ Fortsæt derefter med den næste fil.
 """
 
 
+def sleep(sleepamount):
+    while sleepamount > 0:
+        if morris["turn"] >= 1000 or dead():
+            break
+        else:
+            morris["sleepiness"] -= 10
+            morris["thirst"] +=1
+            morris["hunger"] +=1
+            morris["whisky"] += 0
+            morris["gold"] += 0
+            morris["turn"] += 1
+            sleepamount -=1
+            if morris["sleepiness"] < 0:
+                morris["sleepiness"] = 0
+            print(morris)
+            if morris["turn"] >=1000  or dead():
+                break
+
+def mine(mineamount):
+    while mineamount > 0:
+        if morris["turn"] >= 1000 or dead():
+            break
+        else:
+            morris["sleepiness"] +=5
+            morris["thirst"] += 5
+            morris["hunger"] += 5
+            morris["whisky"] += 0
+            morris["gold"] += 5
+            morris["turn"] += 1
+            mineamount -= 1
+            print(morris)
+            if morris["turn"] >= 1000 or dead():
+                break
+
+def eat(eatamount):
+    while eatamount > 0:
+        if morris["gold"] <= 1:
+            print("Morris does not have enough gold to perform this action.")
+        else:
+            if morris["turn"] >= 1000 or dead():
+                break
+            else:
+                morris["sleepiness"] +=5
+                morris["thirst"] -=5
+                morris["hunger"] -=20
+                morris["whisky"] += 0
+                morris["gold"] -=2
+                morris["turn"] += 1
+                eatamount -= 1
+                if morris["thirst"] < 0:
+                    morris["thirst"] = 0
+                if morris["hunger"] < 0:
+                    morris["hunger"] = 0
+                print(morris)
+                if morris["turn"] >= 1000 or dead():
+                    break
+
+def buy_whisky(wamount):
+    while wamount >0:
+        if morris["gold"] <= 0:
+            print("Morris does not have enough gold to perform this action.")
+        if morris["whisky"] >= 10:
+            print("Morris already has the maximum amount of whisky.")
+        else:
+            if morris["turn"] >= 1000 or dead():
+                break
+            else:
+                morris["sleepiness"] +=5
+                morris["thirst"] +=1
+                morris["hunger"] +=1
+                morris["whisky"] += 1
+                morris["gold"] -=1
+                morris["turn"] +=1
+                wamount -= 1
+                print(morris)
+                if morris["turn"] >= 1000 or dead():
+                    break
+
+def drink(drinkamount):
+    if morris["whisky"] <= 0:
+        if not morris["turn"] >= 1000 and not dead():
+            print("Morris does not have enough whisky to perform this action.")
+    else:
+        while drinkamount > 0:
+            if morris["turn"] >= 1000 or dead():
+                break
+            else:
+                morris["sleepiness"] +=5
+                morris["thirst"] -=15
+                morris["hunger"] -=1
+                morris["whisky"] -= 1
+                morris["gold"] += 0
+                morris["turn"] +=1
+                drinkamount -= 1
+                if morris["thirst"] < 0:
+                    morris["thirst"] = 0
+                if morris["hunger"] < 0:
+                    morris["hunger"] = 0
+                print(morris)
+                if morris["turn"] >= 1000 or dead():
+                    break
+
+
+def dead():
+    return morris["sleepiness"] >=100 or morris["thirst"] >= 100 or morris["hunger"] >= 100
+
+
+morris = {"turn": 0, "sleepiness": 0, "thirst": 0, "hunger": 0, "whisky": 0, "gold": 0}
+
+if morris["sleepiness"] < 0:
+    morris["sleepiness"] = 0
+
+if morris["thirst"] < 0:
+    morris["thirst"] = 0
+
+if morris["hunger"] < 0:
+    morris["hunger"] = 0
+
+
+
+#notdone
+while not dead() and morris["turn"] < 1000:
+    mine(10)
+    buy_whisky(3)
+    drink(2)
+    eat(2)
+    sleep(8)
+    eat(2)
+    drink(1)
+    sleep(2)
+
+
+
+if dead():
+    print("Morris died.")
