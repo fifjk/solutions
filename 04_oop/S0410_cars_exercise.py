@@ -20,3 +20,33 @@ Når dit program er færdigt, skal du skubbe det til dit github-repository.
 Send derefter denne Team-besked til din lærer: <filename> færdig
 Fortsæt derefter med den næste fil."""
 
+def drive_vehicle(vehicle):
+    if vehicle == 1:
+        print("You rode the bike.")
+        print(vehicle1_sound)
+    if vehicle == 2:
+        print("You drove the car.")
+        print(vehicle2_sound)
+
+
+vehicle1 = "Bike"
+vehicle2 = "Car"
+
+vehicle1_wheels = 2
+vehicle2_wheels = 4
+
+vehicle1_speed = "90 km/h"
+vehicle2_speed = "150 km/h"
+
+vehicle1_sound = "Rawr"
+vehicle2_sound = "Vroom"
+
+print(f"1. Vehicle: {vehicle1}. Number of wheels: {vehicle1_wheels}. Maximum speed: {vehicle1_speed}.")
+print(f"2. Vehicle: {vehicle2}. Number of wheels: {vehicle2_wheels}. Maximum speed: {vehicle2_speed}.")
+
+user_input = input("Which will you choose? Type 1 or 2 below.\n")
+
+if user_input == "1":
+    drive_vehicle(1)
+if user_input == "2":
+    drive_vehicle(2)
