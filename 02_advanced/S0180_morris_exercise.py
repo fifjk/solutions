@@ -157,7 +157,6 @@ if morris["hunger"] < 0:
 
 
 
-#notdone
 while not dead() and morris["turn"] < 1000:
     mine(10)
     buy_whisky(3)
@@ -172,3 +171,5 @@ while not dead() and morris["turn"] < 1000:
 
 if dead():
     print("Morris died.")
+
+print(f"You reached {morris["turn"]} turns and Morris got {morris['gold']} gold.")
