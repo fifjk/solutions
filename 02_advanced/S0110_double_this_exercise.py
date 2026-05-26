@@ -37,4 +37,4 @@ def double_this(number):
     double_number = number * 2
     return double_number
 
-print(double_this(24))
+print(double_this(3))

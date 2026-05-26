@@ -14,31 +14,31 @@ Tilføj oop-relaterede kommentarer til denne kode.
 """
 
 
-class Building:
-    def __init__(self, area, floors, value):
-        self.area = area
+class Building: #class
+    def __init__(self, area, floors, value): #constructor
+        self.area = area #attributes
         self.floors = floors
         self._value = value
 
-    def renovate(self):
+    def renovate(self): #function
         print("Installing an extra bathroom...")
         self._adjust_value(10)
 
-    def _adjust_value(self, percentage):
+    def _adjust_value(self, percentage): #protected method
         self._value *= 1 + (percentage / 100)
         print(f'Value has been adjusted by {percentage}% to {self._value:.2f}\n')
 
 
-class Skyscraper(Building):
+class Skyscraper(Building): #class inherited from above class
 
-    def renovate(self):
+    def renovate(self): #function
         print("Installing a faster elevator.")
         self._adjust_value(6)
 
 
-small_house = Building(160, 2, 200000)
+small_house = Building(160, 2, 200000) #creating object from init
 skyscraper = Skyscraper(5000, 25, 10000000)
 
-for building in [small_house, skyscraper]:
+for building in [small_house, skyscraper]: #forloop using both classes
     print(f'This building has {building.floors} floors and an area of {building.area} square meters.')
     building.renovate()

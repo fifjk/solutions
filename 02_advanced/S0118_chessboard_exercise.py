@@ -18,7 +18,6 @@ Hvis du går i stå, så spørg google, de andre elever, en AI eller læreren.
 Når dit program er færdigt, skal du skubbe det til dit github-repository.
 Fortsæt derefter med den næste fil.
 """
-
 rows = ["A", "B", "C", "D"]
 cols = ["1", "2", "3", "4", "5"]
 
