@@ -37,3 +37,67 @@ og sammenlign det med lærerens løsning i S0730_rpg1_solution.py
 
 Send derefter denne Teams-besked til din lærer: <filename> færdig
 Fortsæt derefter med den næste fil."""
+
+class Character:
+
+    def __init__(self, name, max_health, _current_health, attackpower):
+        self.name = name
+        self.max_health = max_health
+        self._current_health = _current_health
+        self.attackpower = attackpower
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their attackpower is {self.attackpower}.")
+
+    def hit(self, other):
+        if other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot attack them.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot attack.")
+        else:
+            print(f"{self.name} attacked {other.name}!")
+            other.get_hit(self.attackpower)
+
+    def get_hit(self, damage):
+        if (self._current_health - damage) <= 0:
+            self._current_health -= damage
+            print(f"{self.name} died.")
+            self.max_health = self._current_health
+        else:
+            self._current_health -= damage
+            print(f"{self.name} took {damage} damage. They now have {self._current_health} health.")
+
+    def get_healed(self, heal_amount):
+        if self._current_health <= (self.max_health - heal_amount):
+            self._current_health += heal_amount
+            print(f"{self.name} got healed {heal_amount} health. They now have {self._current_health} health.")
+        else:
+            extra_health = self.max_health - self._current_health
+            self._current_health = self.max_health
+            print(f"{self.name} got healed {extra_health} health. They now have {self._current_health} health.")
+
+
+class Healer(Character):
+
+    def __init__(self, name, max_health, _current_health, healpower):
+        super().__init__(name, max_health, _current_health, 0)
+        self.healpower = healpower
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their healpower is {self.healpower}.")
+
+    def heal(self, other):
+        if other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot heal them.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot heal.")
+        else:
+            print(f"{self.name} healed {other.name}!")
+            other.get_healed(self.healpower)
+
+
+hero = Character("Hero", 100, 100, 10)
+villain = Character("Villain", 100, 100, 20)
+healer = Healer("Healer", 80, 80, 20)
