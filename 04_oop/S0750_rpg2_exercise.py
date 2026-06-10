@@ -31,3 +31,148 @@ Når dit program er færdigt, skal du skubbe det til dit github-repository.
 Send derefter denne Teams-besked til din lærer: <filename> done
 Fortsæt derefter med den næste fil."""
 
+import random
+
+class Character:
+
+    def __init__(self, name, max_health, current_health, attackpower):
+        self.name = name
+        self.max_health = max_health
+        self._current_health = current_health
+        self.attackpower = attackpower
+        self.sleeping = False
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their attackpower is {self.attackpower}.")
+
+    def is_sleeping(self):
+        if self.sleeping:
+            self.sleeping = False
+            print(f"{self.name} woke up.")
+
+    def hit(self, other):
+        if other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot attack them.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot attack.")
+        elif self.sleeping:
+            self.sleeping = False
+        else:
+            print(f"{self.name} attacked {other.name}!")
+            other.get_hit(self.attackpower)
+
+    def get_hit(self, attackpower):
+        if (self._current_health - attackpower) <= 0:
+            self._current_health -= attackpower
+            print(f"{self.name} died.")
+            self.max_health = self._current_health
+        else:
+            self._current_health -= attackpower
+            print(f"{self.name} took {attackpower} damage. They now have {self._current_health} health.")
+            self.is_sleeping()
+
+    def get_healed(self, healpower):
+        if self._current_health <= (self.max_health - healpower):
+            self._current_health += healpower
+            print(f"{self.name} got healed {healpower} health. They now have {self._current_health} health.")
+        else:
+            extra_health = self.max_health - self._current_health
+            self._current_health = self.max_health
+            print(f"{self.name} got healed {extra_health} health. They now have {self._current_health} health.")
+
+    def get_commanded(self):
+        if (self._current_health - self.attackpower) <= 0:
+            self._current_health -= self.attackpower
+            print(f"{self.name} died.")
+            self.max_health = self._current_health
+        else:
+            self._current_health -= self.attackpower
+            self.is_sleeping()
+            print(f"{self.name} hit themself and took {self.attackpower} damage. They now have {self._current_health} health.")
+
+    def get_slept(self):
+        print(f"{self.name} successfully got slept. They will sleep through their next move, or until they are attacked or commanded.")
+        self.sleeping = True
+
+
+class Healer(Character):
+
+    def __init__(self, name, max_health, current_health, healpower):
+        super().__init__(name, max_health, current_health, 0)
+        self.healpower = healpower
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their healpower is {self.healpower}.")
+
+    def heal(self, other):
+        if other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot heal them.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot heal.")
+        else:
+            print(f"{self.name} healed {other.name}!")
+            other.get_healed(self.healpower)
+
+
+class Puppeteer(Character):
+
+    def __init__(self, name, max_health, current_health, max_psychicenergy, psychicenergy):
+        super().__init__(name, max_health, current_health, 5)
+        self.maxpsyenergy = max_psychicenergy
+        self.psyenergy = psychicenergy
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their current psychic energy is at {self.psyenergy}, and their maximum is {self.maxpsyenergy}.")
+
+    def command(self, other):
+        if self.psyenergy < (self.maxpsyenergy/5):
+            print(f"The puppeteer needs at least 20 psychic energy to command someone.")
+        elif other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot command them.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot command.")
+        else:
+            print(f"{self.name} commanded {other.name} to hit themself!")
+            other.get_commanded(self.psyenergy)
+
+    def restore_energy(self):
+        if self.psyenergy <= (self.maxpsyenergy - (self.maxpsyenergy/5)):
+            self.psyenergy += (self.maxpsyenergy/5)
+            print(f"{self.name} recovered {(self.maxpsyenergy/5)} psychic energy. They now have {self.psyenergy} psychic energy.")
+        else:
+            extra_energy = self.maxpsyenergy - (self.maxpsyenergy/5)
+            self.psyenergy = self.maxpsyenergy
+            print(f"{self.name} got recovered {extra_energy} psychic energy. They now have {self._current_health} psychic energy.")
+
+class Bard(Character):
+
+    def __init__(self, name, max_health, current_health, chance_of_success):
+        super().__init__(name, max_health, current_health, 5)
+        self.success_chance = chance_of_success
+
+    def __repr__(self):
+        return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
+                f"Their chance of success at at singing someone to sleep is {self.success_chance}.")
+
+    def sing(self, other):
+        if other.max_health <= 0:
+            print(f"{other.name} is dead. {self.name} cannot sing them to sleep.")
+        elif self.max_health <= 0:
+            print(f"{self.name} is dead. They cannot sing.")
+        else:
+            print(f"{self.name} is attempting to sing {other.name} to sleep...")
+            success = random.randint(1, self.success_chance)
+            if success == 1:
+                other.get_slept()
+            else:
+                print(f"{self.name} was unsuccessful.")
+
+
+hero = Character("Hero", 100, 100, 10)
+villain = Character("Villain", 100, 100, 20)
+healer = Healer("Healer", 60, 80, 20)
+puppeteer = Puppeteer("Puppeteer", 80, 80, 100, 100)
+bard = Bard("Bard", 60, 60, 3)

@@ -40,10 +40,10 @@ Fortsæt derefter med den næste fil."""
 
 class Character:
 
-    def __init__(self, name, max_health, _current_health, attackpower):
+    def __init__(self, name, max_health, current_health, attackpower):
         self.name = name
         self.max_health = max_health
-        self._current_health = _current_health
+        self._current_health = current_health
         self.attackpower = attackpower
 
     def __repr__(self):
@@ -80,8 +80,8 @@ class Character:
 
 class Healer(Character):
 
-    def __init__(self, name, max_health, _current_health, healpower):
-        super().__init__(name, max_health, _current_health, 0)
+    def __init__(self, name, max_health, current_health, healpower):
+        super().__init__(name, max_health, current_health, 0)
         self.healpower = healpower
 
     def __repr__(self):
