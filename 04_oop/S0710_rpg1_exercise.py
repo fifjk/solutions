@@ -59,19 +59,19 @@ class Character:
             print(f"{self.name} attacked {other.name}!")
             other.get_hit(self.attackpower)
 
-    def get_hit(self, damage):
-        if (self._current_health - damage) <= 0:
-            self._current_health -= damage
+    def get_hit(self, attackpower):
+        if (self._current_health - attackpower) <= 0:
+            self._current_health -= attackpower
             print(f"{self.name} died.")
             self.max_health = self._current_health
         else:
-            self._current_health -= damage
-            print(f"{self.name} took {damage} damage. They now have {self._current_health} health.")
+            self._current_health -= attackpower
+            print(f"{self.name} took {attackpower} damage. They now have {self._current_health} health.")
 
-    def get_healed(self, heal_amount):
-        if self._current_health <= (self.max_health - heal_amount):
-            self._current_health += heal_amount
-            print(f"{self.name} got healed {heal_amount} health. They now have {self._current_health} health.")
+    def get_healed(self, healpower):
+        if self._current_health <= (self.max_health - healpower):
+            self._current_health += healpower
+            print(f"{self.name} got healed {healpower} health. They now have {self._current_health} health.")
         else:
             extra_health = self.max_health - self._current_health
             self._current_health = self.max_health
