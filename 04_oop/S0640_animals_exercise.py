@@ -129,10 +129,10 @@ dinosaur = Animal("Dinosaur", "rawr", 500.85, 300, 4, False)
 cow = Animal("Cow", "moo", 100, 100, 4, True)
 snake = Animal("Snake", "sss", 10, 30, 0, True)
 
-luna = Dog("Luna", "woof", 30.9, 5.6, 4, True, 40, False)
+luna = Dog("Luna", "woof", 30.9, 6.2, 4, True, 40, False)
 vio = Dog("Violetta", "woof", 45.8, 8.9, 4, True, 50, False)
 chess = Dog("Chess", "woof", 30, 6.8, 4, False, 5, True)
-larry = Dog("Larry", "bark", 38.9, 10.2, 3, False, 32.4, True)
+mogens = Dog("Mogens", "...", 20.19, 8.6, 4, False, 2.8, False)
 
 
 print(dinosaur)
@@ -142,7 +142,7 @@ print(Dog.make_noise(luna))
 print(Dog.wag_tail(luna))
 print(Dog.wag_tail(chess))
 new_dog_1 = luna + chess
-new_dog_2 = vio + larry
+new_dog_2 = vio + mogens
 new_dog_3 = luna + new_dog_1
 
 print(new_dog_1)
