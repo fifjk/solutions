@@ -41,6 +41,7 @@ class Character:
         self._current_health = current_health
         self.attackpower = attackpower
         self.sleeping = False
+        self.dead = False
 
     def __repr__(self):
         return (f"{self.name} currently has {self._current_health} health, with a max health of {self.max_health}. "
@@ -52,25 +53,27 @@ class Character:
             print(f"{self.name} woke up.")
 
     def hit(self, other):
-        if other.max_health <= 0:
+        if other.dead:
             print(f"{other.name} is dead. {self.name} cannot attack them.")
-        elif self.max_health <= 0:
+        elif self.dead:
             print(f"{self.name} is dead. They cannot attack.")
         elif self.sleeping:
             self.sleeping = False
         else:
-            hit_or_miss = random.randint(1, 10)
-            if hit_or_miss == 1:
-                print(f"{self.name} tried to attack {other.name} but missed!")
+            if self.sleeping:
+                print(f"{self.name} was told to attack {other.name}, but {self.name} is sleeping.")
             else:
-                print(f"{self.name} attacked {other.name}!")
-                other.get_hit(self.attackpower)
+                hit_or_miss = random.randint(1, 10)
+                if hit_or_miss == 1:
+                    print(f"{self.name} tried to attack {other.name} but missed!")
+                else:
+                    print(f"{self.name} attacked {other.name}!")
+                    other.get_hit(self.attackpower)
 
     def get_hit(self, attackpower):
         if (self._current_health - attackpower) <= 0:
-            self._current_health -= attackpower
             print(f"{self.name} died.")
-            self.max_health = self._current_health
+            self.dead = True
         else:
             self._current_health -= attackpower
             print(f"{self.name} took {attackpower} damage. They now have {self._current_health} health.")
@@ -87,15 +90,15 @@ class Character:
 
     def get_commanded(self):
         if (self._current_health - self.attackpower) <= 0:
-            self._current_health -= self.attackpower
             print(f"{self.name} died.")
-            self.max_health = self._current_health
+            self.dead = True
         else:
             self._current_health -= self.attackpower
             self.is_sleeping()
             print(f"{self.name} hit themself and took {self.attackpower} damage. They now have {self._current_health} health.")
 
     def get_slept(self):
+        self.is_sleeping()
         print(f"{self.name} successfully got slept. They will sleep through their next move, or until they are attacked or commanded.")
         self.sleeping = True
 
@@ -111,9 +114,9 @@ class Healer(Character):
                 f"Their healpower is {self.healpower}.")
 
     def heal(self, other):
-        if other.max_health <= 0:
+        if other.dead:
             print(f"{other.name} is dead. {self.name} cannot heal them.")
-        elif self.max_health <= 0:
+        elif self.dead:
             print(f"{self.name} is dead. They cannot heal.")
         else:
             hit_or_miss = random.randint(1, 10)
@@ -138,17 +141,21 @@ class Puppeteer(Character):
     def command(self, other):
         if self.psyenergy < (self.maxpsyenergy/5):
             print(f"The puppeteer needs at least 20 psychic energy to command someone.")
-        elif other.max_health <= 0:
+        elif other.dead:
             print(f"{other.name} is dead. {self.name} cannot command them.")
-        elif self.max_health <= 0:
+        elif self.dead:
             print(f"{self.name} is dead. They cannot command.")
         else:
-            hit_or_miss = random.randint(1, 10)
-            if hit_or_miss == 1:
-                print(f"{self.name} tried to command {other.name} but they resisted!")
+            self.is_sleeping()
+            if self.sleeping:
+                print(f"{self.name} was told to command {other.name}, but {self.name} is sleeping.")
             else:
-                print(f"{self.name} commanded {other.name} to hit themself!")
-                other.get_commanded()
+                hit_or_miss = random.randint(1, 10)
+                if hit_or_miss == 1:
+                    print(f"{self.name} tried to command {other.name} but they resisted!")
+                else:
+                    print(f"{self.name} commanded {other.name} to hit themself!")
+                    other.get_commanded()
 
     def restore_energy(self):
         if self.psyenergy <= (self.maxpsyenergy - (self.maxpsyenergy/5)):
@@ -170,9 +177,9 @@ class Bard(Character):
                 f"Their chance of success at at singing someone to sleep is {self.success_chance}.")
 
     def sing(self, other):
-        if other.max_health <= 0:
+        if other.dead:
             print(f"{other.name} is dead. {self.name} cannot sing them to sleep.")
-        elif self.max_health <= 0:
+        elif self.dead:
             print(f"{self.name} is dead. They cannot sing.")
         else:
             print(f"{self.name} is attempting to sing {other.name} to sleep...")
@@ -184,9 +191,9 @@ class Bard(Character):
 
 
 hero = Character("Hero", 100, 100, 20)
-villain = Character("Villain", 100, 100, 20)
-healer = Healer("Healer", 60, 80, 20)
-puppeteer = Puppeteer("Puppeteer", 80, 80, 100, 100)
+villain = Character("Villain", 100, 20, 20)
+healer = Healer("Healer", 60, 60, 20)
+puppeteer = Puppeteer("Puppeteer", 80, 20, 100, 100)
 bard = Bard("Bard", 60, 60, 3)
 
 
@@ -201,20 +208,31 @@ character_names = {
 team1 = [hero, healer, bard]
 team2 = [villain, puppeteer]
 
+
 def play_game():
     round_number = 1
-    while hero.max_health > 0 and villain.max_health > 0 and healer.max_health > 0 and puppeteer.max_health > 0 and bard.max_health > 0:
+    end_game = False
+    while not end_game:
+        if hero.dead and healer.dead and bard.dead:
+            end_game = True
+            continue
+        elif villain.dead and puppeteer.dead:
+            end_game = True
+            continue
+        else:
+            end_game = False
 
         if round_number == 1:
-            move = input("\nWhat's your move? Type 'help' for help.\n")
+            print(f"Round {round_number}\n")
+            move = input("What's your move? Type 'help' for help.\n")
         else:
-            move = input("\nWhat's your next move? Type 'help' for help.\n")
+            print(f"\nRound {round_number}\n")
+            move = input("What's your next move? Type 'help' for help.\n")
 
         if move == "help":
             print("Your current options are:\n"
-                  "Attack: hero_attack or villain_attack\n"
+                  "Attack: hero_attack\n"
                   "Heal: healer_heal\n"
-                  "Command: puppeteer_command\n"
                   "Sing: bard_sing\n"
                   "Make sure to type in lower case!")
 
@@ -253,20 +271,42 @@ def play_game():
         print("")
         who_attacks = random.randint(1, len(team2))
         whos_attacked = random.randint(1, len(team1))
-        if who_attacks == 1:
-            if whos_attacked == 1:
-                villain.hit(hero)
-            elif whos_attacked == 2:
-                villain.hit(healer)
-            elif whos_attacked == 3:
-                villain.hit(bard)
+        if villain.dead and puppeteer.dead:
+            continue
         else:
-            if whos_attacked == 1:
-                puppeteer.command(hero)
-            elif whos_attacked == 2:
-                puppeteer.command(healer)
-            elif whos_attacked == 3:
-                puppeteer.command(bard)
+            if who_attacks == 1:
+                if villain.dead:
+                    if whos_attacked == 1:
+                        puppeteer.command(hero)
+                    elif whos_attacked == 2:
+                        puppeteer.command(healer)
+                    elif whos_attacked == 3:
+                        puppeteer.command(bard)
+                elif whos_attacked == 1:
+                    villain.hit(hero)
+                elif whos_attacked == 2:
+                    villain.hit(healer)
+                elif whos_attacked == 3:
+                    villain.hit(bard)
+            else:
+                if puppeteer.dead:
+                    if whos_attacked == 1:
+                        villain.hit(hero)
+                    elif whos_attacked == 2:
+                        villain.hit(healer)
+                    elif whos_attacked == 3:
+                        villain.hit(bard)
+                if whos_attacked == 1:
+                    puppeteer.command(hero)
+                elif whos_attacked == 2:
+                    puppeteer.command(healer)
+                elif whos_attacked == 3:
+                    puppeteer.command(bard)
+
+    if villain.dead and puppeteer.dead:
+        print("Villain and Puppeteer both died. Team 1 won.")
+    else:
+        print("Hero, Healer and Bard all died. Team 2 won.")
 
 
 play_game()
