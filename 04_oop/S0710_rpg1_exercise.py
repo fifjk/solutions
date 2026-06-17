@@ -101,3 +101,6 @@ class Healer(Character):
 hero = Character("Hero", 100, 100, 10)
 villain = Character("Villain", 100, 100, 20)
 healer = Healer("Healer", 80, 80, 20)
+
+hero.hit(villain)
+healer.heal(villain)

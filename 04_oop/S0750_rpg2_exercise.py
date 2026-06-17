@@ -59,8 +59,12 @@ class Character:
         elif self.sleeping:
             self.sleeping = False
         else:
-            print(f"{self.name} attacked {other.name}!")
-            other.get_hit(self.attackpower)
+            hit_or_miss = random.randint(1, 10)
+            if hit_or_miss == 1:
+                print(f"{self.name} tried to attack {other.name} but missed!")
+            else:
+                print(f"{self.name} attacked {other.name}!")
+                other.get_hit(self.attackpower)
 
     def get_hit(self, attackpower):
         if (self._current_health - attackpower) <= 0:
@@ -99,7 +103,7 @@ class Character:
 class Healer(Character):
 
     def __init__(self, name, max_health, current_health, healpower):
-        super().__init__(name, max_health, current_health, 0)
+        super().__init__(name, max_health, current_health, 5)
         self.healpower = healpower
 
     def __repr__(self):
@@ -112,14 +116,18 @@ class Healer(Character):
         elif self.max_health <= 0:
             print(f"{self.name} is dead. They cannot heal.")
         else:
-            print(f"{self.name} healed {other.name}!")
-            other.get_healed(self.healpower)
+            hit_or_miss = random.randint(1, 10)
+            if hit_or_miss == 1:
+                print(f"{self.name} tried to heal {other.name} but failed!")
+            else:
+                print(f"{self.name} healed {other.name}!")
+                other.get_healed(self.healpower)
 
 
 class Puppeteer(Character):
 
     def __init__(self, name, max_health, current_health, max_psychicenergy, psychicenergy):
-        super().__init__(name, max_health, current_health, 5)
+        super().__init__(name, max_health, current_health, 10)
         self.maxpsyenergy = max_psychicenergy
         self.psyenergy = psychicenergy
 
@@ -135,8 +143,12 @@ class Puppeteer(Character):
         elif self.max_health <= 0:
             print(f"{self.name} is dead. They cannot command.")
         else:
-            print(f"{self.name} commanded {other.name} to hit themself!")
-            other.get_commanded(self.psyenergy)
+            hit_or_miss = random.randint(1, 10)
+            if hit_or_miss == 1:
+                print(f"{self.name} tried to command {other.name} but they resisted!")
+            else:
+                print(f"{self.name} commanded {other.name} to hit themself!")
+                other.get_commanded()
 
     def restore_energy(self):
         if self.psyenergy <= (self.maxpsyenergy - (self.maxpsyenergy/5)):
@@ -171,8 +183,90 @@ class Bard(Character):
                 print(f"{self.name} was unsuccessful.")
 
 
-hero = Character("Hero", 100, 100, 10)
+hero = Character("Hero", 100, 100, 20)
 villain = Character("Villain", 100, 100, 20)
 healer = Healer("Healer", 60, 80, 20)
 puppeteer = Puppeteer("Puppeteer", 80, 80, 100, 100)
 bard = Bard("Bard", 60, 60, 3)
+
+
+character_names = {
+    "villain": villain,
+    "hero": hero,
+    "healer": healer,
+    "puppeteer": puppeteer,
+    "bard": bard
+}
+
+team1 = [hero, healer, bard]
+team2 = [villain, puppeteer]
+
+def play_game():
+    round_number = 1
+    while hero.max_health > 0 and villain.max_health > 0 and healer.max_health > 0 and puppeteer.max_health > 0 and bard.max_health > 0:
+
+        if round_number == 1:
+            move = input("\nWhat's your move? Type 'help' for help.\n")
+        else:
+            move = input("\nWhat's your next move? Type 'help' for help.\n")
+
+        if move == "help":
+            print("Your current options are:\n"
+                  "Attack: hero_attack or villain_attack\n"
+                  "Heal: healer_heal\n"
+                  "Command: puppeteer_command\n"
+                  "Sing: bard_sing\n"
+                  "Make sure to type in lower case!")
+
+            continue
+
+        elif move == "hero_attack":
+            target_name = input("Who should Hero attack?\n")
+            target = character_names.get(target_name)
+            hero.hit(target)
+            round_number += 1
+
+        elif move == "villain_attack":
+            target_name = input("Who should Villain attack?\n")
+            target = character_names.get(target_name)
+            villain.hit(target)
+            round_number += 1
+
+        elif move == "healer_heal":
+            target_name = input("Who should Healer heal?\n")
+            target = character_names.get(target_name)
+            healer.heal(target)
+            round_number += 1
+
+        elif move == "puppeteer_command":
+            target_name = input("Who should Puppeteer command?\n")
+            target = character_names.get(target_name)
+            puppeteer.command(target)
+            round_number += 1
+
+        elif move == "bard_sing":
+            target_name = input("Who should Bard sing to?\n")
+            target = character_names.get(target_name)
+            bard.sing(target)
+            round_number += 1
+
+        print("")
+        who_attacks = random.randint(1, len(team2))
+        whos_attacked = random.randint(1, len(team1))
+        if who_attacks == 1:
+            if whos_attacked == 1:
+                villain.hit(hero)
+            elif whos_attacked == 2:
+                villain.hit(healer)
+            elif whos_attacked == 3:
+                villain.hit(bard)
+        else:
+            if whos_attacked == 1:
+                puppeteer.command(hero)
+            elif whos_attacked == 2:
+                puppeteer.command(healer)
+            elif whos_attacked == 3:
+                puppeteer.command(bard)
+
+
+play_game()
