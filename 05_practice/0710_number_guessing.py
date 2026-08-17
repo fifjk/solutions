@@ -24,53 +24,28 @@ Når dit program er færdigt, skal du skubbe det til dit github-repository.
 """
 import random
 
-ongoing = True
+random_numbers = [random.randint(1, 9), random.randint(1, 9), random.randint(1, 9), random.randint(1, 9)]
 
-def randomizer():
-    return random.randint(0, 9)
+blackcoins = 0
 
+print("Welcome to the number guessing game! Type a 4 digit number, for example: 2937.\n"
+      "For every number you've guessed correct in the right position, you'll get a Black Coin.\n"
+      "For every number you've guessed correct in the wrong position, you'll get a White Coin.\n"
+      "You win by getting all four Black Coins. Good luck!")
 
-numberlist = [randomizer(), randomizer(), randomizer(), randomizer()]
-
-print("Welcome to the number guessing game. There will be generated 4 random numbers between 0-9, and you will try to guess each one in order.\n"
-      "If you guess a number correct in the right position, you get a black coin. If you guess a number correct but in the incorrect position, you get a white coin.\n"
-      "You will play until you've got all the numbers correct in their right positions.\n\n"
-      "Starting game...\n"
-      "Game started!\n\n"
-      "Generating numbers...\n"
-      "Numbers generated!\n\n")
-
-
-while ongoing:
+while blackcoins < 4:
     blackcoins = 0
     whitecoins = 0
-    number1 = input("Please guess the first number between 0 and 9.\n")
-    number2 = input("Please guess the second number between 0 and 9.\n")
-    number3 = input("Please guess the third number between 0 and 9.\n")
-    number4 = input("Please guess the fourth number between 0 and 9.\n\n")
-    if number1 == numberlist[0]:
-        blackcoins += 1
-    elif number1 in numberlist:
-        whitecoins += 1
-    else:
-        continue
-    if number2 == numberlist[1]:
-        blackcoins += 1
-    elif number2 in numberlist:
-        whitecoins += 1
-    else:
-        continue
-    if number3 == numberlist[2]:
-        blackcoins += 1
-    elif number3 in numberlist:
-        whitecoins += 1
-    else:
-        continue
-    if number4 == numberlist[3]:
-        blackcoins += 1
-    elif number4 in numberlist:
-        whitecoins += 1
-    else:
-        continue
+    number_guess = [int(x) for x in input("\nGuess a 4 digit number:\n")]
+    for i in range(4):
+        if number_guess[i] == random_numbers[i]:
+            blackcoins += 1
+            whitecoins -= 1
+    for i in range(4):
+        if number_guess[i] in random_numbers:
+            whitecoins += 1
+    print(f"Black coins: {blackcoins}. White coins: {whitecoins}.")
+
+print("You guessed right! :D")
 
 
