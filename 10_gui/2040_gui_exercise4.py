@@ -56,9 +56,9 @@ pady = 4
 rowheight = 24
 treeview_background = "#eeeeee"
 treeview_foreground = "black"
-treeview_selected = "#773333"
-oddrow = "#ddeedd"
-evenrow = "#cce0cc"
+treeview_selected = "#A46788"
+oddrow = "#F2D5FF"
+evenrow = "#EBBCFF"
 
 test_data_list = []
 test_data_list.append(("1", 4000, "Alaska"))
