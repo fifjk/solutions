@@ -10,7 +10,7 @@ main_window.title('PlusBus')
 main_window.geometry("1500x500")
 
 
-# region global constants
+# global constants
 padx = 8
 pady = 4
 rowheight = 24
@@ -20,6 +20,154 @@ treeview_selected = '#DF94DB'
 oddrow = '#DF94DB'
 evenrow = '#CE75BE'
 INTERNAL_ERROR_CODE = 0
+
+
+# general functions
+def read_table(tree, class_):
+    count = 0
+    result = dcsql.select_all(class_)
+    for record in result:
+        if record.valid():
+            if count % 2 == 0:
+                tree.insert(parent='', index='end', iid=str(count), text='', value=record.convert_to_tuple(), tags=('evenrow',))
+            else:
+                tree.insert(parent='', index='end', iid=str(count), text='', value=record.convert_to_tuple(), tags=('oddrow',))
+            count += 1
+
+def empty_treeview(tree):
+    tree.delete(*tree.get_children())
+
+def refresh_treeview(tree, class_):
+    empty_treeview(tree)
+    read_table(tree, class_)
+
+
+# client functions
+def read_client_entries():
+    return entry_clients_last_name.get(), entry_clients_contact.get()
+
+def clear_client_entries():
+    entry_clients_last_name.delete(0, tk.END)
+    entry_clients_contact.delete(0, tk.END)
+
+def write_client_entries(values):
+    entry_clients_last_name.insert(0, values[0])
+    entry_clients_contact.insert(0, values[1])
+
+def edit_clients(_, tree):
+    index_selected = tree.focus()
+    values = tree.item(index_selected, 'values')
+    clear_client_entries()
+    write_client_entries(values)
+
+def create_clients(tree, record):
+    clients = dcd.Clients.convert_from_tuple(record)
+    dcsql.create_record(clients)
+    clear_client_entries()
+    refresh_treeview(tree, dcd.Clients)
+
+def update_clients(tree, record):
+    clients = dcd.Clients.convert_from_tuple(record)
+    dcsql.update_clients(clients)
+    clear_client_entries()
+    refresh_treeview(tree, dcd.Clients)
+
+def delete_clients(tree, record):
+    clients = dcd.Clients.convert_from_tuple(record)
+    dcsql.delete_soft_clients(clients)
+    clear_client_entries()
+    refresh_treeview(tree, dcd.Clients)
+
+
+# trip functions
+def read_trip_entries():
+    return entry_trips_route.get(), entry_trips_date.get(), entry_trips_capacity.get()
+
+
+def clear_trip_entries():
+    entry_trips_route.delete(0, tk.END)
+    entry_trips_date.delete(0, tk.END)
+    entry_trips_capacity.delete(0, tk.END)
+
+
+def write_trip_entries(values):
+    entry_trips_route.insert(0, values[0])
+    entry_trips_date.insert(0, values[1])
+    entry_trips_capacity.insert(0, values[2])
+
+
+def edit_trip(_, tree):
+    index_selected = tree.focus()
+    values = tree.item(index_selected, 'values')
+    clear_trip_entries()
+    write_trip_entries(values)
+
+
+def create_trip(tree, record):
+    trips = dcd.Trips.convert_from_tuple(record)
+    dcsql.create_record(trips)
+    clear_trip_entries()
+    refresh_treeview(tree, dcd.Trips)
+
+
+def update_trip(tree, record):
+    trips = dcd.Trips.convert_from_tuple(record)
+    dcsql.update_trip(trips)
+    clear_trip_entries()
+    refresh_treeview(tree, dcd.Trips)
+
+
+def delete_trip(tree, record):
+    trips = dcd.Trips.convert_from_tuple(record)
+    dcsql.delete_soft_trip(trips)
+    clear_trip_entries()
+    refresh_treeview(tree, dcd.Trips)
+
+
+# booking functions
+def read_booking_entries():
+    return entry_bookings_client_id.get(), entry_bookings_trip_id.get(), entry_bookings_seats.get()
+
+
+def clear_booking_entries():
+    entry_bookings_client_id.delete(0, tk.END)
+    entry_bookings_trip_id.delete(0, tk.END)
+    entry_bookings_seats.delete(0, tk.END)
+
+
+def write_booking_entries(values):
+    entry_bookings_client_id.insert(0, values[0])
+    entry_bookings_trip_id.insert(0, values[1])
+    entry_bookings_seats.insert(0, values[2])
+
+
+def edit_bookings(_, tree):
+    index_selected = tree.focus()
+    values = tree.item(index_selected, 'values')
+    clear_booking_entries()
+    write_booking_entries(values)
+
+
+def create_bookings(tree, record):
+    bookings = dcd.Bookings.convert_from_tuple(record)
+    dcsql.create_record(bookings)
+    clear_booking_entries()
+    refresh_treeview(tree, dcd.Bookings)
+
+
+def update_bookings(tree, record):
+    bookings = dcd.Bookings.convert_from_tuple(record)
+    dcsql.update_bookings(bookings)
+    clear_booking_entries()
+    refresh_treeview(tree, dcd.Bookings)
+
+
+def delete_bookings(tree, record):
+    bookings = dcd.Bookings.convert_from_tuple(record)
+    dcsql.delete_soft_bookings(bookings)
+    clear_booking_entries()
+    refresh_treeview(tree, dcd.Bookings)
+
 
 # style
 style = ttk.Style()
