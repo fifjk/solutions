@@ -25,9 +25,9 @@ def create_test_data():
         new_items.append(Trips(route="Moss Grotto - Bellhart", date=date_2, capacity=6))
         new_items.append(Trips(route="Copenhagen - Delhi", date=date_3, capacity=50))
 
-        new_items.append(Bookings(client_id=201, trip_id = 7, seats=5))
-        new_items.append(Bookings(client_id=88, trip_id = 13, seats=1))
-        new_items.append(Bookings(client_id=49, trip_id = 22, seats=2))
+        new_items.append(Bookings(client_id=20112, trip_id=19367193, seats=5))
+        new_items.append(Bookings(client_id=88167, trip_id=13391073, seats=1))
+        new_items.append(Bookings(client_id=49920, trip_id=22109481, seats=2))
 
         session.add_all(new_items)
         session.commit()
