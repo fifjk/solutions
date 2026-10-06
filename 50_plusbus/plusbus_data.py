@@ -32,26 +32,27 @@ class Clients(Base):
 
 class Trips(Base):
     __tablename__ = "trips"
+    bus_id = Column(Integer, primary_key=True)
     route = Column(String)
     date = Column(Date)
-    capacity = Column(Integer, primary_key=True)
+    capacity = Column(Integer)
 
     def __repr__(self):
-        return f"Trips: {self.route}, {self.date}, {self.capacity}"
+        return f"Trips: {self.bus_id} {self.route}, {self.date}, {self.capacity}"
 
     def convert_to_tuple(self):
-        return self.route, self.date, self.capacity
+        return self.bus_id, self.route, self.date, self.capacity
 
     def valid(self):
         try:
-            value = int(self.date)
+            value = int(self.capacity)
         except ValueError:
             return False
         return value >= 0
 
     @staticmethod
     def convert_from_tuple(tuple_):
-        trips = Trips(route=tuple_[0], date=tuple_[1], capacity=tuple_[2])
+        trips = Trips(bus_id=tuple_[0], route=tuple_[1], date=tuple_[2], capacity=tuple_[3])
         return trips
 
 
