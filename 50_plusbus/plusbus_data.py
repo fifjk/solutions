@@ -23,7 +23,7 @@ class Clients(Base):
             value = int(self.contact)
         except ValueError:
             return False
-        return value <= 0
+        return value >= 0
 
     @staticmethod
     def convert_from_tuple(tuple_):
@@ -49,7 +49,7 @@ class Trips(Base):
             value = int(self.capacity)
         except ValueError:
             return False
-        return value <= 0
+        return value >= 0
 
     @staticmethod
     def convert_from_tuple(tuple_):
@@ -75,7 +75,7 @@ class Bookings(Base):
             value = int(self.seats)
         except ValueError:
             return False
-        return value <= 0
+        return value >= 0
 
     @staticmethod
     def convert_from_tuple(tuple_):

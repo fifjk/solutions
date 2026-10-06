@@ -16,7 +16,7 @@ pady = 4
 rowheight = 24
 treeview_background = '#FFDAF5'
 treeview_foreground = 'black'
-treeview_selected = '#DF94DB'
+treeview_selected = '#DDABDB'
 oddrow = '#DF94DB'
 evenrow = '#CE75BE'
 INTERNAL_ERROR_CODE = 0
@@ -184,6 +184,7 @@ style = ttk.Style()
 style.theme_use('default')
 style.configure("Treeview", background=treeview_background, foreground=treeview_foreground, rowheight=rowheight, fieldbackground=treeview_background)
 style.configure("Treeview.Heading", background=treeview_background, foreground=treeview_foreground)
+style.map('Treeview', background=[('selected', treeview_selected)])
 
 
 # region frames

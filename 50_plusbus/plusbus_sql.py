@@ -29,6 +29,7 @@ def create_test_data():
         session.add_all(new_items)
         session.commit()
 
+
 def select_all(classparam):
     with Session(engine) as session:
         records = session.scalars(select(classparam))
