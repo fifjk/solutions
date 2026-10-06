@@ -7,7 +7,7 @@ import plusbus_func as dcf
 
 main_window = tk.Tk()
 main_window.title('PlusBus')
-main_window.geometry("1500x500")
+main_window.geometry("1800x500")
 
 
 # global constants
@@ -22,7 +22,7 @@ evenrow = '#CE75BE'
 INTERNAL_ERROR_CODE = 0
 
 
-# general functions
+# region general functions
 def read_table(tree, class_):
     count = 0
     result = dcsql.select_all(class_)
@@ -40,19 +40,22 @@ def empty_treeview(tree):
 def refresh_treeview(tree, class_):
     empty_treeview(tree)
     read_table(tree, class_)
+# endregion general functions
 
 
-# client functions
+# region client functions
 def read_client_entries():
-    return entry_clients_last_name.get(), entry_clients_contact.get()
+    return entry_clients_id.get(), entry_clients_last_name.get(), entry_clients_contact.get()
 
 def clear_client_entries():
+    entry_clients_id.delete(0, tk.END)
     entry_clients_last_name.delete(0, tk.END)
     entry_clients_contact.delete(0, tk.END)
 
 def write_client_entries(values):
-    entry_clients_last_name.insert(0, values[0])
-    entry_clients_contact.insert(0, values[1])
+    entry_clients_id.insert(0, values[0])
+    entry_clients_last_name.insert(0, values[1])
+    entry_clients_contact.insert(0, values[2])
 
 def edit_clients(_, tree):
     index_selected = tree.focus()
@@ -77,22 +80,23 @@ def delete_clients(tree, record):
     dcsql.delete_soft_clients(clients)
     clear_client_entries()
     refresh_treeview(tree, dcd.Clients)
+# endregion client functions
 
 
-# trip functions
+# region trip functions
 def read_trip_entries():
-    return entry_trips_bus_id.get(), entry_trips_route.get(), entry_trips_date.get(), entry_trips_capacity.get()
+    return entry_trips_id.get(), entry_trips_route.get(), entry_trips_date.get(), entry_trips_capacity.get()
 
 
 def clear_trip_entries():
-    entry_trips_bus_id.delete(0, tk.END)
+    entry_trips_id.delete(0, tk.END)
     entry_trips_route.delete(0, tk.END)
     entry_trips_date.delete(0, tk.END)
     entry_trips_capacity.delete(0, tk.END)
 
 
 def write_trip_entries(values):
-    entry_trips_bus_id.insert(0, values[0])
+    entry_trips_id.insert(0, values[0])
     entry_trips_route.insert(0, values[1])
     entry_trips_date.insert(0, values[2])
     entry_trips_capacity.insert(0, values[3])
@@ -114,33 +118,36 @@ def create_trip(tree, record):
 
 def update_trip(tree, record):
     trips = dcd.Trips.convert_from_tuple(record)
-    dcsql.update_trip(trips)
+    dcsql.update_trips(trips)
     clear_trip_entries()
     refresh_treeview(tree, dcd.Trips)
 
 
 def delete_trip(tree, record):
     trips = dcd.Trips.convert_from_tuple(record)
-    dcsql.delete_soft_trip(trips)
+    dcsql.delete_soft_trips(trips)
     clear_trip_entries()
     refresh_treeview(tree, dcd.Trips)
+# endregion trip functions
 
 
-# booking functions
+# region booking functions
 def read_booking_entries():
-    return entry_bookings_client_id.get(), entry_bookings_trip_id.get(), entry_bookings_seats.get()
+    return entry_bookings_id.get(), entry_bookings_client_id.get(), entry_bookings_trip_id.get(), entry_bookings_seats.get()
 
 
 def clear_booking_entries():
+    entry_bookings_id.delete(0, tk.END)
     entry_bookings_client_id.delete(0, tk.END)
     entry_bookings_trip_id.delete(0, tk.END)
     entry_bookings_seats.delete(0, tk.END)
 
 
 def write_booking_entries(values):
-    entry_bookings_client_id.insert(0, values[0])
-    entry_bookings_trip_id.insert(0, values[1])
-    entry_bookings_seats.insert(0, values[2])
+    entry_bookings_id.insert(0, values[0])
+    entry_bookings_client_id.insert(0, values[1])
+    entry_bookings_trip_id.insert(0, values[2])
+    entry_bookings_seats.insert(0, values[3])
 
 
 def edit_bookings(_, tree):
@@ -169,6 +176,7 @@ def delete_bookings(tree, record):
     dcsql.delete_soft_bookings(bookings)
     clear_booking_entries()
     refresh_treeview(tree, dcd.Bookings)
+# endregion booking functions
 
 
 # style
@@ -176,6 +184,9 @@ style = ttk.Style()
 style.theme_use('default')
 style.configure("Treeview", background=treeview_background, foreground=treeview_foreground, rowheight=rowheight, fieldbackground=treeview_background)
 style.configure("Treeview.Heading", background=treeview_background, foreground=treeview_foreground)
+
+
+# region frames
 
 # client frame
 frame_clients = tk.LabelFrame(main_window, text="Clients")
@@ -212,7 +223,10 @@ tree_scroll_bookings.grid(row=0, column=1, padx=0, pady=pady, sticky='ns')
 tree_bookings = ttk.Treeview(tree_frame_bookings, selectmode="browse")
 tree_bookings.grid(row=0, column=0, padx=0, pady=pady)
 tree_scroll_bookings.config(command=tree_bookings.yview)
+# endregion frames
 
+
+# region entries and label frames
 
 # client entry and label frames
 controls_frame_clients = tk.Frame(frame_clients)
@@ -220,17 +234,23 @@ controls_frame_clients.grid(row=3, column=0, padx=padx, pady=pady)
 edit_frame_clients = tk.Frame(controls_frame_clients)
 edit_frame_clients.grid(row=0, column=0, padx=padx, pady=pady)
 
+# id entry
+label_clients_id = tk.Label(edit_frame_clients, text="ID")
+label_clients_id.grid(row=0, column=0, padx=padx, pady=pady)
+entry_clients_id = tk.Entry(edit_frame_clients, width=4, justify="right")
+entry_clients_id.grid(row=1, column=0, padx=padx, pady=pady)
+
 # last name entry
 label_clients_last_name = tk.Label(edit_frame_clients, text="Last name")
-label_clients_last_name.grid(row=0, column=0, padx=padx, pady=pady)
+label_clients_last_name.grid(row=0, column=1, padx=padx, pady=pady)
 entry_clients_last_name = tk.Entry(edit_frame_clients, width=4, justify="right")
-entry_clients_last_name.grid(row=1, column=0, padx=padx, pady=pady)
+entry_clients_last_name.grid(row=1, column=1, padx=padx, pady=pady)
 
 # contact entry
 label_clients_contact = tk.Label(edit_frame_clients, text="Contact")
-label_clients_contact.grid(row=0, column=1, padx=padx, pady=pady)
+label_clients_contact.grid(row=0, column=2, padx=padx, pady=pady)
 entry_clients_contact = tk.Entry(edit_frame_clients, width=4, justify="right")
-entry_clients_contact.grid(row=1, column=1, padx=padx, pady=pady)
+entry_clients_contact.grid(row=1, column=2, padx=padx, pady=pady)
 
 
 # trip entry and label frames
@@ -239,11 +259,11 @@ controls_frame_trips.grid(row=3, column=0, padx=padx, pady=pady)
 edit_frame_trips = tk.Frame(controls_frame_trips)
 edit_frame_trips.grid(row=0, column=0, padx=padx, pady=pady)
 
-# bus id entry
-label_trips_bus_id = tk.Label(edit_frame_trips, text="Bus ID")
-label_trips_bus_id.grid(row=0, column=0, padx=padx, pady=pady)
-entry_trips_bus_id = tk.Entry(edit_frame_trips, width=4, justify="right")
-entry_trips_bus_id.grid(row=1, column=0, padx=padx, pady=pady)
+# id entry
+label_trips_id = tk.Label(edit_frame_trips, text="ID")
+label_trips_id.grid(row=0, column=0, padx=padx, pady=pady)
+entry_trips_id = tk.Entry(edit_frame_trips, width=4, justify="right")
+entry_trips_id.grid(row=1, column=0, padx=padx, pady=pady)
 
 # route entry
 label_trips_route = tk.Label(edit_frame_trips, text="Route")
@@ -270,26 +290,33 @@ controls_frame_bookings.grid(row=3, column=0, padx=padx, pady=pady)
 edit_frame_bookings = tk.Frame(controls_frame_bookings)
 edit_frame_bookings.grid(row=0, column=0, padx=padx, pady=pady)
 
+# id entry
+label_bookings_id = tk.Label(edit_frame_bookings, text="ID")
+label_bookings_id.grid(row=0, column=0, padx=padx, pady=pady)
+entry_bookings_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
+entry_bookings_id.grid(row=1, column=0, padx=padx, pady=pady)
+
 # client id entry
 label_bookings_client_id = tk.Label(edit_frame_bookings, text="Client ID")
-label_bookings_client_id.grid(row=0, column=0, padx=padx, pady=pady)
+label_bookings_client_id.grid(row=0, column=1, padx=padx, pady=pady)
 entry_bookings_client_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
-entry_bookings_client_id.grid(row=1, column=0, padx=padx, pady=pady)
+entry_bookings_client_id.grid(row=1, column=1, padx=padx, pady=pady)
 
 # trip id entry
 label_bookings_trip_id = tk.Label(edit_frame_bookings, text="Trip ID")
-label_bookings_trip_id.grid(row=0, column=1, padx=padx, pady=pady)
+label_bookings_trip_id.grid(row=0, column=2, padx=padx, pady=pady)
 entry_bookings_trip_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
-entry_bookings_trip_id.grid(row=1, column=1, padx=padx, pady=pady)
+entry_bookings_trip_id.grid(row=1, column=2, padx=padx, pady=pady)
 
 # seat entry
 label_bookings_seats = tk.Label(edit_frame_bookings, text="Seats")
-label_bookings_seats.grid(row=0, column=2, padx=padx, pady=pady)
+label_bookings_seats.grid(row=0, column=3, padx=padx, pady=pady)
 entry_bookings_seats = tk.Entry(edit_frame_bookings, width=4, justify="right")
-entry_bookings_seats.grid(row=1, column=2, padx=padx, pady=pady)
+entry_bookings_seats.grid(row=1, column=3, padx=padx, pady=pady)
+# endregion entries and label frames
 
 
-# BUTTONS
+# region buttons
 
 # client buttons frames
 button_frame_clients = tk.Frame(controls_frame_clients)
@@ -358,28 +385,33 @@ button_delete_bookings.grid(row=0, column=3, padx=padx, pady=pady)
 # - clear
 button_clear_bookings = tk.Button(button_frame_bookings, text="Clear", command=clear_booking_entries())
 button_clear_bookings.grid(row=0, column=4, padx=padx, pady=pady)
+# endregion buttons
 
+
+# region table formats
 
 # client table format
-tree_clients['column'] = ("last_name", "contact")
+tree_clients['column'] = ("id", "last_name", "contact")
 tree_clients.column("#0", width=0, stretch=tk.NO)
-tree_clients.column("last_name", anchor=tk.E, width=150)
+tree_clients.column("id", anchor=tk.E, width=100)
+tree_clients.column("last_name", anchor=tk.W, width=150)
 tree_clients.column("contact", anchor=tk.W, width=200)
 tree_clients.heading("#0", text="", anchor=tk.W)
+tree_clients.heading("id", text="ID", anchor=tk.CENTER)
 tree_clients.heading("last_name", text="Last name", anchor=tk.CENTER)
 tree_clients.heading("contact", text="Contact", anchor=tk.CENTER)
 tree_clients.tag_configure('oddrow', background=oddrow)
 tree_clients.tag_configure('evenrow', background=evenrow)
 
 # trip table format
-tree_trips['column'] = ("bus_id", "route", "date", "capacity")
+tree_trips['column'] = ("id", "route", "date", "capacity")
 tree_trips.column("#0", width=0, stretch=tk.NO)
-tree_trips.column("bus_id", anchor=tk.E, width=100)
+tree_trips.column("id", anchor=tk.E, width=100)
 tree_trips.column("route", anchor=tk.W, width=200)
 tree_trips.column("date", anchor=tk.W, width=150)
 tree_trips.column("capacity", anchor=tk.W, width=100)
 tree_trips.heading("#0", text="", anchor=tk.W)
-tree_trips.heading("bus_id", text="Bus ID", anchor=tk.CENTER)
+tree_trips.heading("id", text="ID", anchor=tk.CENTER)
 tree_trips.heading("route", text="Route", anchor=tk.CENTER)
 tree_trips.heading("date", text="Date", anchor=tk.CENTER)
 tree_trips.heading("capacity", text="Capacity", anchor=tk.CENTER)
@@ -387,17 +419,24 @@ tree_trips.tag_configure('oddrow', background=oddrow)
 tree_trips.tag_configure('evenrow', background=evenrow)
 
 # booking table format
-tree_bookings['column'] = ("client_id", "trip_id", "seats")
+tree_bookings['column'] = ("id", "client_id", "trip_id", "seats")
 tree_bookings.column("#0", width=0, stretch=tk.NO)
-tree_bookings.column("client_id", anchor=tk.E, width=150)
+tree_bookings.column("id", anchor=tk.E, width=100)
+tree_bookings.column("client_id", anchor=tk.W, width=150)
 tree_bookings.column("trip_id", anchor=tk.W, width=150)
 tree_bookings.column("seats", anchor=tk.W, width=100)
 tree_bookings.heading("#0", text="", anchor=tk.W)
+tree_bookings.heading("id", text="ID", anchor=tk.CENTER)
 tree_bookings.heading("client_id", text="Client ID", anchor=tk.CENTER)
 tree_bookings.heading("trip_id", text="Trip ID", anchor=tk.CENTER)
 tree_bookings.heading("seats", text="Seats", anchor=tk.CENTER)
 tree_bookings.tag_configure('oddrow', background=oddrow)
 tree_bookings.tag_configure('evenrow', background=evenrow)
+# endregion table formats
+
 
 if __name__ == "__main__":
+    refresh_treeview(tree_clients, dcd.Clients)
+    refresh_treeview(tree_trips, dcd.Trips)
+    refresh_treeview(tree_bookings, dcd.Bookings)
     main_window.mainloop()
