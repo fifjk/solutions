@@ -7,12 +7,13 @@ import plusbus_func as dcf
 
 main_window = tk.Tk()
 main_window.title('PlusBus')
-main_window.geometry("1800x500")
+main_window.geometry("1600x450")
 
 
 # global constants
 padx = 8
 pady = 4
+buttonwidth = 10
 rowheight = 24
 treeview_background = '#FFDAF5'
 treeview_foreground = 'black'
@@ -182,9 +183,23 @@ def delete_bookings(tree, record):
 # style
 style = ttk.Style()
 style.theme_use('default')
-style.configure("Treeview", background=treeview_background, foreground=treeview_foreground, rowheight=rowheight, fieldbackground=treeview_background)
-style.configure("Treeview.Heading", background=treeview_background, foreground=treeview_foreground)
-style.map('Treeview', background=[('selected', treeview_selected)])
+style.configure(
+    "Treeview",
+    background=treeview_background,
+    foreground=treeview_foreground,
+    rowheight=rowheight,
+    fieldbackground=treeview_background
+)
+style.configure(
+    "Treeview.Heading",
+    background=treeview_background,
+    foreground=treeview_foreground
+)
+style.map(
+    'Treeview',
+    background=[('selected',
+                 treeview_selected)]
+)
 
 
 # region frames
@@ -238,19 +253,19 @@ edit_frame_clients.grid(row=0, column=0, padx=padx, pady=pady)
 # id entry
 label_clients_id = tk.Label(edit_frame_clients, text="ID")
 label_clients_id.grid(row=0, column=0, padx=padx, pady=pady)
-entry_clients_id = tk.Entry(edit_frame_clients, width=4, justify="right")
+entry_clients_id = tk.Entry(edit_frame_clients, width=6, justify="left")
 entry_clients_id.grid(row=1, column=0, padx=padx, pady=pady)
 
 # last name entry
 label_clients_last_name = tk.Label(edit_frame_clients, text="Last name")
 label_clients_last_name.grid(row=0, column=1, padx=padx, pady=pady)
-entry_clients_last_name = tk.Entry(edit_frame_clients, width=4, justify="right")
+entry_clients_last_name = tk.Entry(edit_frame_clients, width=20, justify="left")
 entry_clients_last_name.grid(row=1, column=1, padx=padx, pady=pady)
 
 # contact entry
 label_clients_contact = tk.Label(edit_frame_clients, text="Contact")
 label_clients_contact.grid(row=0, column=2, padx=padx, pady=pady)
-entry_clients_contact = tk.Entry(edit_frame_clients, width=4, justify="right")
+entry_clients_contact = tk.Entry(edit_frame_clients, width=25, justify="left")
 entry_clients_contact.grid(row=1, column=2, padx=padx, pady=pady)
 
 
@@ -263,25 +278,25 @@ edit_frame_trips.grid(row=0, column=0, padx=padx, pady=pady)
 # id entry
 label_trips_id = tk.Label(edit_frame_trips, text="ID")
 label_trips_id.grid(row=0, column=0, padx=padx, pady=pady)
-entry_trips_id = tk.Entry(edit_frame_trips, width=4, justify="right")
+entry_trips_id = tk.Entry(edit_frame_trips, width=10, justify="left")
 entry_trips_id.grid(row=1, column=0, padx=padx, pady=pady)
 
 # route entry
 label_trips_route = tk.Label(edit_frame_trips, text="Route")
 label_trips_route.grid(row=0, column=1, padx=padx, pady=pady)
-entry_trips_route = tk.Entry(edit_frame_trips, width=4, justify="right")
+entry_trips_route = tk.Entry(edit_frame_trips, width=30, justify="left")
 entry_trips_route.grid(row=1, column=1, padx=padx, pady=pady)
 
 # date entry
 label_trips_date = tk.Label(edit_frame_trips, text="Date")
 label_trips_date.grid(row=0, column=2, padx=padx, pady=pady)
-entry_trips_date = tk.Entry(edit_frame_trips, width=4, justify="right")
+entry_trips_date = tk.Entry(edit_frame_trips, width=10, justify="left")
 entry_trips_date.grid(row=1, column=2, padx=padx, pady=pady)
 
 # capacity entry
 label_trips_capacity = tk.Label(edit_frame_trips, text="Capacity")
 label_trips_capacity.grid(row=0, column=3, padx=padx, pady=pady)
-entry_trips_capacity = tk.Entry(edit_frame_trips, width=4, justify="right")
+entry_trips_capacity = tk.Entry(edit_frame_trips, width=5, justify="left")
 entry_trips_capacity.grid(row=1, column=3, padx=padx, pady=pady)
 
 
@@ -294,25 +309,25 @@ edit_frame_bookings.grid(row=0, column=0, padx=padx, pady=pady)
 # id entry
 label_bookings_id = tk.Label(edit_frame_bookings, text="ID")
 label_bookings_id.grid(row=0, column=0, padx=padx, pady=pady)
-entry_bookings_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
+entry_bookings_id = tk.Entry(edit_frame_bookings, width=6, justify="left")
 entry_bookings_id.grid(row=1, column=0, padx=padx, pady=pady)
 
 # client id entry
 label_bookings_client_id = tk.Label(edit_frame_bookings, text="Client ID")
 label_bookings_client_id.grid(row=0, column=1, padx=padx, pady=pady)
-entry_bookings_client_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
+entry_bookings_client_id = tk.Entry(edit_frame_bookings, width=6, justify="left")
 entry_bookings_client_id.grid(row=1, column=1, padx=padx, pady=pady)
 
 # trip id entry
 label_bookings_trip_id = tk.Label(edit_frame_bookings, text="Trip ID")
 label_bookings_trip_id.grid(row=0, column=2, padx=padx, pady=pady)
-entry_bookings_trip_id = tk.Entry(edit_frame_bookings, width=4, justify="right")
+entry_bookings_trip_id = tk.Entry(edit_frame_bookings, width=10, justify="left")
 entry_bookings_trip_id.grid(row=1, column=2, padx=padx, pady=pady)
 
 # seat entry
 label_bookings_seats = tk.Label(edit_frame_bookings, text="Seats")
 label_bookings_seats.grid(row=0, column=3, padx=padx, pady=pady)
-entry_bookings_seats = tk.Entry(edit_frame_bookings, width=4, justify="right")
+entry_bookings_seats = tk.Entry(edit_frame_bookings, width=5, justify="left")
 entry_bookings_seats.grid(row=1, column=3, padx=padx, pady=pady)
 # endregion entries and label frames
 
@@ -326,19 +341,31 @@ button_frame_clients.grid(row=1, column=0, padx=padx, pady=pady)
 # client buttons
 
 # - create
-button_create_clients = tk.Button(button_frame_clients, text="Create", command=lambda: create_clients(tree_clients, read_client_entries()))
+button_create_clients = tk.Button(button_frame_clients,
+                                  text="Create",
+                                  command=lambda: create_clients(tree_clients, read_client_entries()),
+                                  width=buttonwidth)
 button_create_clients.grid(row=0, column=1, padx=padx, pady=pady)
 
 # - update
-button_update_clients = tk.Button(button_frame_clients, text="Update", command=lambda: update_clients(tree_clients, read_client_entries()))
+button_update_clients = tk.Button(button_frame_clients,
+                                  text="Update",
+                                  command=lambda: update_clients(tree_clients, read_client_entries()),
+                                  width=buttonwidth)
 button_update_clients.grid(row=0, column=2, padx=padx, pady=pady)
 
 # - delete
-button_delete_clients = tk.Button(button_frame_clients, text="Delete", command=lambda: delete_clients(tree_clients, read_client_entries()))
+button_delete_clients = tk.Button(button_frame_clients,
+                                  text="Delete",
+                                  command=lambda: delete_clients(tree_clients, read_client_entries()),
+                                  width=buttonwidth)
 button_delete_clients.grid(row=0, column=3, padx=padx, pady=pady)
 
 # - clear
-button_clear_clients = tk.Button(button_frame_clients, text="Clear", command=clear_client_entries())
+button_clear_clients = tk.Button(button_frame_clients,
+                                 text="Clear",
+                                 command=lambda: clear_client_entries(),
+                                 width=buttonwidth)
 button_clear_clients.grid(row=0, column=4, padx=padx, pady=pady)
 
 
@@ -349,19 +376,31 @@ button_frame_trips.grid(row=1, column=0, padx=padx, pady=pady)
 # trip buttons
 
 # - create
-button_create_trips = tk.Button(button_frame_trips, text="Create", command=lambda: create_trip(tree_trips, read_trip_entries()))
+button_create_trips = tk.Button(button_frame_trips,
+                                text="Create",
+                                command=lambda: create_trip(tree_trips, read_trip_entries()),
+                                width=buttonwidth)
 button_create_trips.grid(row=0, column=1, padx=padx, pady=pady)
 
 # - update
-button_update_trips = tk.Button(button_frame_trips, text="Update", command=lambda: update_trip(tree_trips, read_trip_entries()))
+button_update_trips = tk.Button(button_frame_trips,
+                                text="Update",
+                                command=lambda: update_trip(tree_trips, read_trip_entries()),
+                                width=buttonwidth)
 button_update_trips.grid(row=0, column=2, padx=padx, pady=pady)
 
 # - delete
-button_delete_trips = tk.Button(button_frame_trips, text="Delete", command=lambda: delete_trip(tree_trips, read_trip_entries()))
+button_delete_trips = tk.Button(button_frame_trips,
+                                text="Delete",
+                                command=lambda: delete_trip(tree_trips, read_trip_entries()),
+                                width=buttonwidth)
 button_delete_trips.grid(row=0, column=3, padx=padx, pady=pady)
 
 # - clear
-button_clear_trips = tk.Button(button_frame_trips, text="Clear", command=clear_trip_entries())
+button_clear_trips = tk.Button(button_frame_trips,
+                               text="Clear",
+                               command=lambda: clear_trip_entries(),
+                               width=buttonwidth)
 button_clear_trips.grid(row=0, column=4, padx=padx, pady=pady)
 
 
@@ -372,19 +411,31 @@ button_frame_bookings.grid(row=1, column=0, padx=padx ,pady=pady)
 # booking buttons
 
 # - create
-button_create_bookings = tk.Button(button_frame_bookings, text="Create", command=lambda: create_bookings(tree_bookings, read_booking_entries()))
+button_create_bookings = tk.Button(button_frame_bookings,
+                                   text="Create",
+                                   command=lambda: create_bookings(tree_bookings, read_booking_entries()),
+                                   width=buttonwidth)
 button_create_bookings.grid(row=0, column=1, padx=padx, pady=pady)
 
 # - update
-button_update_bookings = tk.Button(button_frame_bookings, text="Update", command=lambda: update_bookings(tree_bookings, read_booking_entries()))
+button_update_bookings = tk.Button(button_frame_bookings,
+                                   text="Update",
+                                   command=lambda: update_bookings(tree_bookings, read_booking_entries()),
+                                   width=buttonwidth)
 button_update_bookings.grid(row=0, column=2, padx=padx, pady=pady)
 
 # - delete
-button_delete_bookings = tk.Button(button_frame_bookings, text="Delete", command=lambda: delete_bookings(tree_bookings, read_booking_entries()))
+button_delete_bookings = tk.Button(button_frame_bookings,
+                                   text="Delete",
+                                   command=lambda: delete_bookings(tree_bookings, read_booking_entries()),
+                                   width=buttonwidth)
 button_delete_bookings.grid(row=0, column=3, padx=padx, pady=pady)
 
 # - clear
-button_clear_bookings = tk.Button(button_frame_bookings, text="Clear", command=clear_booking_entries())
+button_clear_bookings = tk.Button(button_frame_bookings,
+                                  text="Clear",
+                                  command=lambda: clear_booking_entries(),
+                                  width=buttonwidth)
 button_clear_bookings.grid(row=0, column=4, padx=padx, pady=pady)
 # endregion buttons
 
@@ -394,7 +445,7 @@ button_clear_bookings.grid(row=0, column=4, padx=padx, pady=pady)
 # client table format
 tree_clients['column'] = ("id", "last_name", "contact")
 tree_clients.column("#0", width=0, stretch=tk.NO)
-tree_clients.column("id", anchor=tk.E, width=100)
+tree_clients.column("id", anchor=tk.CENTER, width=80)
 tree_clients.column("last_name", anchor=tk.W, width=150)
 tree_clients.column("contact", anchor=tk.W, width=200)
 tree_clients.heading("#0", text="", anchor=tk.W)
@@ -404,13 +455,15 @@ tree_clients.heading("contact", text="Contact", anchor=tk.CENTER)
 tree_clients.tag_configure('oddrow', background=oddrow)
 tree_clients.tag_configure('evenrow', background=evenrow)
 
+tree_clients.bind("<ButtonRelease-1>", lambda event: edit_clients(event, tree_clients))
+
 # trip table format
 tree_trips['column'] = ("id", "route", "date", "capacity")
 tree_trips.column("#0", width=0, stretch=tk.NO)
-tree_trips.column("id", anchor=tk.E, width=100)
+tree_trips.column("id", anchor=tk.CENTER, width=100)
 tree_trips.column("route", anchor=tk.W, width=200)
 tree_trips.column("date", anchor=tk.W, width=150)
-tree_trips.column("capacity", anchor=tk.W, width=100)
+tree_trips.column("capacity", anchor=tk.CENTER, width=80)
 tree_trips.heading("#0", text="", anchor=tk.W)
 tree_trips.heading("id", text="ID", anchor=tk.CENTER)
 tree_trips.heading("route", text="Route", anchor=tk.CENTER)
@@ -419,13 +472,15 @@ tree_trips.heading("capacity", text="Capacity", anchor=tk.CENTER)
 tree_trips.tag_configure('oddrow', background=oddrow)
 tree_trips.tag_configure('evenrow', background=evenrow)
 
+tree_trips.bind("<ButtonRelease-1>", lambda event: edit_trip(event, tree_trips))
+
 # booking table format
 tree_bookings['column'] = ("id", "client_id", "trip_id", "seats")
 tree_bookings.column("#0", width=0, stretch=tk.NO)
-tree_bookings.column("id", anchor=tk.E, width=100)
-tree_bookings.column("client_id", anchor=tk.W, width=150)
-tree_bookings.column("trip_id", anchor=tk.W, width=150)
-tree_bookings.column("seats", anchor=tk.W, width=100)
+tree_bookings.column("id", anchor=tk.CENTER, width=80)
+tree_bookings.column("client_id", anchor=tk.CENTER, width=150)
+tree_bookings.column("trip_id", anchor=tk.CENTER, width=150)
+tree_bookings.column("seats", anchor=tk.CENTER, width=60)
 tree_bookings.heading("#0", text="", anchor=tk.W)
 tree_bookings.heading("id", text="ID", anchor=tk.CENTER)
 tree_bookings.heading("client_id", text="Client ID", anchor=tk.CENTER)
@@ -433,6 +488,8 @@ tree_bookings.heading("trip_id", text="Trip ID", anchor=tk.CENTER)
 tree_bookings.heading("seats", text="Seats", anchor=tk.CENTER)
 tree_bookings.tag_configure('oddrow', background=oddrow)
 tree_bookings.tag_configure('evenrow', background=evenrow)
+
+tree_bookings.bind("<ButtonRelease-1>", lambda event: edit_bookings(event, tree_bookings))
 # endregion table formats
 
 

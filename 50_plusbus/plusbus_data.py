@@ -10,7 +10,7 @@ class Clients(Base):
     __tablename__ = "clients"
     id = Column(Integer, primary_key=True)
     last_name = Column(String)
-    contact = Column(String or Integer)
+    contact = Column(String)
 
     def __repr__(self):
         return f"Clients: {self.id} {self.last_name}, {self.contact}"
@@ -19,11 +19,7 @@ class Clients(Base):
         return self.id, self.last_name, self.contact
 
     def valid(self):
-        try:
-            value = int(self.contact)
-        except ValueError:
-            return False
-        return value >= 0
+        return bool(self.contact)
 
     @staticmethod
     def convert_from_tuple(tuple_):
@@ -53,7 +49,12 @@ class Trips(Base):
 
     @staticmethod
     def convert_from_tuple(tuple_):
-        trips = Trips(id=tuple_[0], route=tuple_[1], date=tuple_[2], capacity=tuple_[3])
+        trips = Trips(
+            id=tuple_[0],
+            route=tuple_[1],
+            date=parser.parse(tuple_[2], dayfirst=True).date(),
+            capacity=tuple_[3]
+        )
         return trips
 
 
