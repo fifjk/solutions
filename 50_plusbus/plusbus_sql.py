@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select, update, delete
 
-from datetime import date
+# from datetime import date
 from plusbus_data import Clients, Trips, Bookings, Base
 
 Database = 'sqlite:///plusbus.db'
@@ -46,7 +46,6 @@ def get_record(classparam, record_id):
 
 def create_record(record):
     with Session(engine) as session:
-        record.id = None
         session.add(record)
         session.commit()
 
@@ -90,7 +89,7 @@ def update_trips(trips):
 
 def delete_hard_trips(trips):
     with Session(engine) as session:
-        session.execute(update(Trips).where(Trips.id == trips.id))
+        session.execute(delete(Trips).where(Trips.id == trips.id))
         session.commit()
 
 
@@ -112,7 +111,7 @@ def update_bookings(bookings):
 
 def delete_hard_bookings(bookings):
     with Session(engine) as session:
-        session.execute(update(Bookings).where(Bookings.id == bookings.id))
+        session.execute(delete(Bookings).where(Bookings.id == bookings.id))
         session.commit()
 
 

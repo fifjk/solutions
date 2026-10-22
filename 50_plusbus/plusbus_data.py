@@ -1,8 +1,8 @@
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import String, Integer, Date
-from dateutil import parser
-from tkinter import messagebox
+from datetime import datetime
+# from tkinter import messagebox
 
 Base = declarative_base()
 
@@ -52,7 +52,7 @@ class Trips(Base):
         trips = Trips(
             id=tuple_[0],
             route=tuple_[1],
-            date=parser.parse(tuple_[2], dayfirst=True).date(),
+            date=datetime.strptime(tuple_[2], "%d-%m-%Y").date(),
             capacity=tuple_[3]
         )
         return trips
