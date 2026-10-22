@@ -6,8 +6,7 @@ from plusbus_data import Clients, Trips, Bookings, Base
 
 Database = 'sqlite:///plusbus.db'
 
-
-def create_test_data():
+"""def create_test_data():
     with Session(engine) as session:
         session.query(Clients).delete()
         session.query(Trips).delete()
@@ -27,7 +26,7 @@ def create_test_data():
         new_items.append(Bookings(id=19083, client_id=88167, trip_id=13391073, seats=1))
 
         session.add_all(new_items)
-        session.commit()
+        session.commit()"""
 
 
 def select_all(classparam):
@@ -52,6 +51,14 @@ def create_record(record):
         session.commit()
 
 
+def delete_data():
+    with Session(engine) as session:
+        session.query(Clients).delete()
+        session.query(Trips).delete()
+        session.query(Bookings).delete()
+
+        session.commit()
+
 # region clients functions
 def update_clients(clients):
     with Session(engine) as session:
@@ -64,10 +71,12 @@ def delete_hard_clients(clients):
         session.execute(delete(Clients).where(Clients.id == clients.id))
         session.commit()
 
+
 def delete_soft_clients(clients):
     with Session(engine) as session:
         session.execute(update(Clients).where(Clients.id == clients.id).values(last_name=clients.last_name, contact=-1))
         session.commit()
+
 
 # endregion clients functions
 
@@ -90,6 +99,7 @@ def delete_soft_trips(trips):
         session.execute(update(Trips).where(Trips.id == trips.id).values(route=trips.route, date=trips.date, capacity=-1))
         session.commit()
 
+
 # endregion trips functions
 
 # region bookings functions
@@ -111,10 +121,30 @@ def delete_soft_bookings(bookings):
         session.execute(update(Bookings).where(Bookings.id == bookings.id).values(client_id=bookings.client_id, trip_id=bookings.trip_id, seats=-1))
         session.commit()
 
+
+def seat_check(trip_id, requested_seats):
+    with Session(engine) as session:
+        trip = session.get(Trips, trip_id)
+        if trip is None or trip.capacity < 0:
+            return False
+
+    bookings = session.scalars(
+        select(Bookings).where(Bookings.trip_id == trip_id)
+    ).all()
+
+    booked_seats = sum(
+        booking.seats for booking in bookings
+        if booking.seats >= 0
+    )
+
+    return booked_seats + requested_seats <= trip.capacity
+
+
 # endregion bookings functions
 
 
 engine = create_engine(Database, echo=False, future=True)
 Base.metadata.create_all(engine)
 
-create_test_data()
+
+# create_test_data()

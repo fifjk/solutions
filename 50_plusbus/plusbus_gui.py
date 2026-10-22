@@ -4,6 +4,7 @@ from tkinter import messagebox
 import plusbus_data as dcd
 import plusbus_sql as dcsql
 import plusbus_func as dcf
+import pyperclip
 
 main_window = tk.Tk()
 main_window.title('PlusBus')
@@ -41,6 +42,12 @@ def empty_treeview(tree):
 def refresh_treeview(tree, class_):
     empty_treeview(tree)
     read_table(tree, class_)
+
+def copy_id(_, tree):
+    index_selected = tree.focus()
+    values = tree.item(index_selected, 'values')
+    pyperclip.copy(values[0])
+
 # endregion general functions
 
 
@@ -78,9 +85,11 @@ def update_clients(tree, record):
 
 def delete_clients(tree, record):
     clients = dcd.Clients.convert_from_tuple(record)
-    dcsql.delete_soft_clients(clients)
+    dcsql.delete_hard_clients(clients)
     clear_client_entries()
     refresh_treeview(tree, dcd.Clients)
+
+
 # endregion client functions
 
 
@@ -126,7 +135,7 @@ def update_trip(tree, record):
 
 def delete_trip(tree, record):
     trips = dcd.Trips.convert_from_tuple(record)
-    dcsql.delete_soft_trips(trips)
+    dcsql.delete_hard_trips(trips)
     clear_trip_entries()
     refresh_treeview(tree, dcd.Trips)
 # endregion trip functions
@@ -160,6 +169,28 @@ def edit_bookings(_, tree):
 
 def create_bookings(tree, record):
     bookings = dcd.Bookings.convert_from_tuple(record)
+
+    if int(bookings.seats) <= 0:
+        messagebox.showerror(
+            "Invalid seats",
+            "The number of seats must be greater than 0."
+        )
+        return
+
+    if not dcsql.seat_check(bookings.trip_id, int(bookings.seats)):
+        messagebox.showerror(
+            "Invalid booking",
+            "The trip doesn't have the requested amount of seats available, "
+            "or the trip ID is invalid."
+        )
+
+    if dcsql.get_record(dcd.Clients, bookings.client_id) is None:
+        messagebox.showerror(
+            "Invalid booking",
+            "The client ID is invalid."
+        )
+        return
+
     dcsql.create_record(bookings)
     clear_booking_entries()
     refresh_treeview(tree, dcd.Bookings)
@@ -174,9 +205,10 @@ def update_bookings(tree, record):
 
 def delete_bookings(tree, record):
     bookings = dcd.Bookings.convert_from_tuple(record)
-    dcsql.delete_soft_bookings(bookings)
+    dcsql.delete_hard_bookings(bookings)
     clear_booking_entries()
     refresh_treeview(tree, dcd.Bookings)
+
 # endregion booking functions
 
 
@@ -456,6 +488,7 @@ tree_clients.tag_configure('oddrow', background=oddrow)
 tree_clients.tag_configure('evenrow', background=evenrow)
 
 tree_clients.bind("<ButtonRelease-1>", lambda event: edit_clients(event, tree_clients))
+tree_clients.bind("<Double-Button-1>", lambda event: copy_id(event, tree_clients))
 
 # trip table format
 tree_trips['column'] = ("id", "route", "date", "capacity")
@@ -473,6 +506,7 @@ tree_trips.tag_configure('oddrow', background=oddrow)
 tree_trips.tag_configure('evenrow', background=evenrow)
 
 tree_trips.bind("<ButtonRelease-1>", lambda event: edit_trip(event, tree_trips))
+tree_trips.bind("<Double-Button-1>", lambda event: copy_id(event, tree_trips))
 
 # booking table format
 tree_bookings['column'] = ("id", "client_id", "trip_id", "seats")
@@ -490,6 +524,7 @@ tree_bookings.tag_configure('oddrow', background=oddrow)
 tree_bookings.tag_configure('evenrow', background=evenrow)
 
 tree_bookings.bind("<ButtonRelease-1>", lambda event: edit_bookings(event, tree_bookings))
+tree_bookings.bind("<Double-Button-1>", lambda event: copy_id(event, tree_bookings))
 # endregion table formats
 
 

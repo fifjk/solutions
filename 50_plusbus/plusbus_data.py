@@ -19,7 +19,7 @@ class Clients(Base):
         return self.id, self.last_name, self.contact
 
     def valid(self):
-        return bool(self.contact)
+        return self.contact != "-1" and self.contact != -1
 
     @staticmethod
     def convert_from_tuple(tuple_):
